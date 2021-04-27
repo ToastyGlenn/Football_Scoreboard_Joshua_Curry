@@ -1,0 +1,164 @@
+// Dr. Tyson McMillan a Soccer Scoreboard using 
+// Object Oriented Programming in C++
+// Due 04/26/21
+// Joshua Curry COSC-1437
+
+#include <iostream>
+#include <string> 
+#include <unistd.h>
+#include <iomanip>
+#include "Class.h"
+#include "Input_Validation_Extended.h"
+
+using namespace std;
+
+// Universal color choices
+string hScore = "\x1b[36;1m"; // home color
+string vScore = "\x1b[35;1m"; // visitor color
+string reset = "\x1b[0m";
+
+int main() 
+{
+  Scoreboard s;
+  Team tOne;
+  Team tTwo; 
+  string newName = "[change name]";
+  string cityName = "";
+  string userChoice = "";
+  string newCoachName = "";
+  int homeTeamQuestion = 0; 
+  int newScore = 0;
+
+  //Set the home team 
+  tOne.setHomeStatus(true); //tOne is the Home Team now   
+
+  //add some initial data to s
+  s.setHome(tOne); 
+  s.setVisitor(tTwo); 
+
+  //Loop this to make it an interactive menu
+
+  do 
+  {
+      system("clear"); //clear the screen of previous content 
+      s.showScoreboard(); //show the current scoreboard data
+      //menu choices 
+      cout << "A = Update Home Team " << hScore << "[Name]" << reset << endl;
+      cout << "B = Update Home Team " << hScore << "[Score]" << reset << endl;
+      cout << "C = Update Home Team " << hScore << "[Coach]" << reset << endl;
+      cout << "D = Update Home Team " << hScore << "[City]" << reset << endl;
+      cout << "E = Update Team [Status]" << endl;
+      cout << "F = Update Away Team " << vScore << "[Name]" << reset << endl;
+      cout << "G = Update Away Team " << vScore << "[Score]" << reset << endl;
+      cout << "H = Update Away Team " << vScore << "[Coach]" << reset << endl;
+      cout << "I = Update Away Team " << vScore << "[City]" << reset << endl;
+      cout << "Z = Exit" << endl;
+      cout << "\nEnter Choice: "; 
+      cin >> userChoice; 
+
+      if(userChoice == "A" || userChoice == "a")
+      {
+        cout << "\n**** Update Home Team Score module *** " << endl; 
+        cout << "\nEnter name for Home Team: ";
+        cin >> newName; 
+        tOne.setTeamName(newName); //set tOne's data to the new desired name
+      }// closes userChoice A || a
+
+      else if(userChoice == "B" || userChoice == "b")
+      {
+        cout << "\n**** Update Home Score Module ****" << endl; 
+        cout << "\nEnter Score for " << newName << ": "; 
+        newScore = validateInt(newScore);
+        tOne.setScore(newScore);  //set the new score for tOne        
+      }// closes userChoice B || b
+
+      else if(userChoice == "C" || userChoice == "c")
+      {
+        cout << "\n**** Update Home Team Coach Module ****" << endl; 
+        cout << "\nEnter " << newName << "'s Coach: "; 
+        cin >> newCoachName; 
+        tOne.setCoachName(newCoachName); 
+      }// closes userChoice C || c
+
+      else if(userChoice == "D" || userChoice == "d")
+      {
+        cout << "\n**** Update Home City ****" << endl;
+        cout << "\nEnter name for Home City: ";
+        cin >> cityName;
+        tOne.setCityName(cityName); // set the new City Name for tOne
+      }// closes userChoice D || d
+
+      else if(userChoice == "E" || userChoice == "e")
+      {
+        cout << "\n**** Update Home Status Module ****" << endl; 
+        cout << "\nWho is the Home team: 1 = T1, 2 = T2: "; 
+        homeTeamQuestion = validateInt(homeTeamQuestion);
+        
+        if(homeTeamQuestion == 1)
+        {
+          tOne.setHomeStatus(true); 
+          tTwo.setHomeStatus(false); 
+        }
+        else if(homeTeamQuestion == 2)
+        {
+          tOne.setHomeStatus(false); 
+          tTwo.setHomeStatus(true);
+        }
+        else
+        {
+          cout << "\nInvalid Input!" << endl;
+          sleep(2); 
+        } // end of if/else homeTeamQuestion
+      }// end of else if userChoice E || e
+
+      else if(userChoice == "F" || userChoice == "f")
+      {
+        cout << "\n**** Update Visitor Team Score module ****" << endl; 
+        cout << "\nEnter name for Visitor's Team: ";
+        cin >> newName; 
+        tTwo.setTeamName(newName); //set tTwo's data to the new desired name
+      }// closes userChoice F || f
+
+      else if(userChoice == "G" || userChoice == "g")
+      {
+        cout << "\n**** Update Visitor Score Module ****" << endl; 
+        cout << "\nEnter Score for " << newName << ": "; 
+        newScore = validateInt(newScore); 
+        tTwo.setScore(newScore);  //set the new score for tOne    
+      }// closes userChoice G || g
+
+      else if(userChoice == "H" || userChoice == "h")
+      {
+        cout << "\n**** Update Visitor Coach Module ****" << endl; 
+        cout << "\nEnter " << newName << "'s Coach: "; 
+        cin >> newCoachName; 
+        tTwo.setCoachName(newCoachName); 
+      }// closes userChoice H || h
+
+      else if(userChoice == "I" || userChoice == "i")
+      {
+        cout << "\n**** Update Visitor City ****" << endl;
+        cout << "\nEnter name for Visitor City: ";
+        cin >> cityName;
+        tTwo.setCityName(cityName); // set the new City Name for tTwo
+      }// closes userChoice I || i
+
+      else if(userChoice == "Z" || userChoice == "z")
+      {
+        cout << "Exit chosen." << endl; 
+      }// closes userChoice Z || z
+
+      else //invalid input: default clause
+      {
+        cout << "\nInvalid input." << endl; 
+        sleep(2); //wait two seconds, go to the next process 
+      }// closes entire if / else clause
+
+      s.setHome(tOne); //refresh the data in s to the new updates...
+      s.setVisitor(tTwo); //refresh the data
+  }// closes DO
+
+  while(userChoice != "Z" && userChoice != "z");
+
+  return 0; 
+}
